@@ -1,6 +1,6 @@
-import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend,reqMessage } from '../api/index';
+import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend,reqMessage,reqMessageList } from '../api/index';
 import { SUCCESS_CODE } from '../api/respcode';
-import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS,RECIEVE_MSG } from './action-types';
+import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST } from './action-types';
 
 import { connectHub } from '../api/hubHelper';
 import { getCookies,setCookies,removeCookies } from '../utils/index';
@@ -22,6 +22,8 @@ const recieveConnectHub = (hubConnection) => ({ type: CONNECT_SUCCESS, data: hub
 
 //獲取訊息
 const recieveMsg =(data)=>({type: RECIEVE_MSG,data:data});
+
+const recieveMsgList=(data)=>({type:RECIEVE_MSG_LIST,data:data});
 
 //http://localhost:56825/register
 
@@ -274,5 +276,20 @@ export const getMsg =({memberid,recieveid})=>{
             console.log("不明原因失敗",result.data)
         }
         
+    }
+}
+
+//獲取對每個用戶的最後訊息
+export const getMsgList =({memberid})=>{
+    return async (dispatch) =>{
+        const response =await reqMessageList({memberid});
+        const result =response.data;
+        //後端回傳訊息成功
+        if (result.code === SUCCESS_CODE) {
+            console.log(result.data)
+            dispatch(recieveMsgList(result.data));
+        } else {
+            console.log("不明原因失敗",result.data)
+        }
     }
 }

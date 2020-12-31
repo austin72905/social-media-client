@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
-import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS,RECIEVE_USERS,CONNECT_SUCCESS,RECIEVE_MSG } from './action-types';
+import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS,RECIEVE_USERS,CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST } from './action-types';
 
 import { getRedirectTo } from '../utils/index';
+import { func } from 'prop-types';
 
 //目的是返回新狀態
 //action.type 不能重複使用...一個reducer 就用一個 ，如果共用就會都跑應該是沒有break 的關係? 所以一直往下跑
@@ -88,6 +89,15 @@ function msgs(state=initMsg,action){
     }
 }
 
+function msgList(state=initMsg,action){
+    switch(action.type){
+        case RECIEVE_MSG_LIST:
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function xxx(state = 0, action) {
     return state;
 }
@@ -106,7 +116,9 @@ export default combineReducers({
     //連線實體
     hubConnection,
     //獲取訊息
-    msgs
+    msgs,
+    //獲取最後的訊息
+    msgList
 });
 
 //登入時

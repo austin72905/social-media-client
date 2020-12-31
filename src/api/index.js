@@ -31,3 +31,6 @@ export const reqUserDetail= ({memberid,username})=> ajax(`${process.env.REACT_AP
 
 //獲取訊息
 export const reqMessage= ({memberid,recieveid})=> ajax(`${process.env.REACT_APP_URL}/message`,{memberid,recieveid});
+
+//獲取訊息列表
+export const reqMessageList= ({memberid})=> ajax(`${process.env.REACT_APP_URL}/message/LastMsgs`,{memberid});

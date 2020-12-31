@@ -13,3 +13,6 @@ export const CONNECT_SUCCESS ="connect_success";
 
 //獲取訊息
 export const RECIEVE_MSG ="recieve_msg";
+
+
+export const RECIEVE_MSG_LIST ="recieve_msg_list";
