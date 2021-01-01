@@ -16,6 +16,7 @@ class Chat extends Component {
     state = {
         name: "",
         msg: "",
+        unread:0,
         msgs: [
             {
                 memberid: 0,
@@ -29,13 +30,13 @@ class Chat extends Component {
 
 
     //自定義的資料存放
-    initData= {}
+    initData = {}
 
     initPassData = () => {
         const path = this.props.location.pathname;
         const pathAr = path.split("/");
         const names = pathAr[2].split("+");
-        const userid =getCookies();
+        const userid = getCookies();
         return {
             memberid: userid,
             recieveid: names[1],
@@ -123,16 +124,20 @@ class Chat extends Component {
         // if(!this.props.HubConnection){
         //     await this.props.connectToHub(names[0])
         // }
-        const data =this.initPassData();
-        this.initData = {...data};
-        console.log("自訂議",this.initData)
-        const {memberid,recieveid} =this.initData;
+        const data = this.initPassData();
+        this.initData = { ...data };
+        console.log("自訂議", this.initData)
+        const { memberid, recieveid } = this.initData;
         // const path = this.props.location.pathname;
         // const pathAr = path.split("/");
         // const names = pathAr[2].split("+");
 
+        //撈資料前先把後端資料庫的數據改成read
+        this.props.hubConnection.invoke("ReadMsg",memberid,recieveid)
+        .catch(err => console.log(err));
+
         //如果還沒有撈資料過
-        if (this.state.msgs[0].memberid === 0 || this.state.msg.length<1) {
+        if (this.state.msgs[0].memberid === 0 || this.state.msg.length < 1) {
             await this.props.getMsg({ memberid, recieveid })
             const msgs = this.props.msgs;
             this.setState({ msgs });
@@ -140,9 +145,11 @@ class Chat extends Component {
 
         console.log("有這個實體嗎", this.props);
 
+
+        
         this.props.hubConnection.on("SendBothMsg", (user, reciever, input) => {
 
-            console.log("有接收到嗎",user,input);
+            console.log("有接收到嗎", user, input);
             //判斷是哪個用戶說的
             const memberid = user.memberid;
             const text = input;
@@ -181,7 +188,7 @@ class Chat extends Component {
         const names = pathAr[2].split("+");
 
         const msgs = this.state.msgs.filter(i => i.memberid !== 0);
-        console.log("輸入的訊息",this.state.msg);
+        console.log("輸入的訊息", this.state.msg);
         console.log("現在的訊息狀態", msgs)
         //console.log("用戶號", names)
         //console.log("型別", typeof (names[0]))

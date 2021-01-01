@@ -34,3 +34,6 @@ export const reqMessage= ({memberid,recieveid})=> ajax(`${process.env.REACT_APP_
 
 //獲取訊息列表
 export const reqMessageList= ({memberid})=> ajax(`${process.env.REACT_APP_URL}/message/LastMsgs`,{memberid});
+
+//獲取未讀訊息總數
+export const reqUnreadTotal = ({memberid})=> ajax(`${process.env.REACT_APP_URL}/message/UnreadMsg`,{memberid});

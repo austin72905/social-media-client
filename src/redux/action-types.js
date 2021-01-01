@@ -16,3 +16,5 @@ export const RECIEVE_MSG ="recieve_msg";
 
 
 export const RECIEVE_MSG_LIST ="recieve_msg_list";
+
+export const RECIEVE_UNREAD_TOTAL ="recieve_unread_total";

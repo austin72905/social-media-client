@@ -12,7 +12,7 @@ import Chat from '../chat/chat';
 import MyProfile from '../profile/profile';
 
 import { getCookies } from '../../utils/index';
-import { getUser, getPersonal,connectToHub } from '../../redux/actions';
+import { getUser, getPersonal, connectToHub, getMsgUnread } from '../../redux/actions';
 
 import './main.scss';
 import { BsChevronLeft, BsFillGearFill, BsFillChatDotsFill, BsHeartFill, BsFillPeopleFill } from 'react-icons/bs';
@@ -67,14 +67,17 @@ class Main extends Component {
         const { memberID } = this.props.user;
         //登錄過，但目前還沒有登入(redux 管理的user裡沒有_id) ，發請求
         if (userid && !memberID) {
-            this.props.getPersonal({memberid:userid});
+            this.props.getPersonal({ memberid: userid });
             console.log("獲取後台請求")
 
         }
         //連線到chathub
-        if(!this.props.hubConnection){
+        if (!this.props.hubConnection) {
             this.props.connectToHub(userid);
         }
+
+
+
 
     }
 
@@ -178,7 +181,7 @@ class Main extends Component {
 
                 </Switch>
 
-
+                {/*下方導覽列*/}
                 {currentNav || otherPath.path === "/profile" ? <NavFooter navList={this.navlist} /> : null}
             </div>
         );
@@ -186,6 +189,6 @@ class Main extends Component {
 }
 
 export default connect(
-    state => ({ user: state.user ,hubConnection: state.hubConnection }),
-    { getUser, getPersonal,connectToHub } //getUser
+    state => ({ user: state.user, hubConnection: state.hubConnection, msgUnread: state.msgUnread}),
+    { getUser, getPersonal, connectToHub, getMsgUnread } //getUser
 )(Main);

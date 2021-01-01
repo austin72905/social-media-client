@@ -1,6 +1,6 @@
-import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend,reqMessage,reqMessageList } from '../api/index';
+import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend,reqMessage,reqMessageList,reqUnreadTotal } from '../api/index';
 import { SUCCESS_CODE } from '../api/respcode';
-import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST } from './action-types';
+import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST,RECIEVE_UNREAD_TOTAL } from './action-types';
 
 import { connectHub } from '../api/hubHelper';
 import { getCookies,setCookies,removeCookies } from '../utils/index';
@@ -24,6 +24,8 @@ const recieveConnectHub = (hubConnection) => ({ type: CONNECT_SUCCESS, data: hub
 const recieveMsg =(data)=>({type: RECIEVE_MSG,data:data});
 
 const recieveMsgList=(data)=>({type:RECIEVE_MSG_LIST,data:data});
+
+const recieveUnreadTotal = (data)=>({type: RECIEVE_UNREAD_TOTAL,data:data});
 
 //http://localhost:56825/register
 
@@ -288,6 +290,20 @@ export const getMsgList =({memberid})=>{
         if (result.code === SUCCESS_CODE) {
             console.log(result.data)
             dispatch(recieveMsgList(result.data));
+        } else {
+            console.log("不明原因失敗",result.data)
+        }
+    }
+}
+
+export const getMsgUnread = ({memberid})=>{
+    return async (dispatch)=>{
+        const response =await reqUnreadTotal({memberid});
+        const result =response.data;
+        //後端回傳訊息成功
+        if (result.code === SUCCESS_CODE) {
+            console.log(result.data)
+            dispatch(recieveUnreadTotal(result.data));
         } else {
             console.log("不明原因失敗",result.data)
         }

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS,RECIEVE_USERS,CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST } from './action-types';
+import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS,RECIEVE_USERS,CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST,RECIEVE_UNREAD_TOTAL } from './action-types';
 
 import { getRedirectTo } from '../utils/index';
 import { func } from 'prop-types';
@@ -98,6 +98,17 @@ function msgList(state=initMsg,action){
     }
 }
 
+const ininUnread={};
+
+function msgUnread(state=ininUnread,action){
+    switch(action.type){
+        case RECIEVE_UNREAD_TOTAL:
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function xxx(state = 0, action) {
     return state;
 }
@@ -118,7 +129,8 @@ export default combineReducers({
     //獲取訊息
     msgs,
     //獲取最後的訊息
-    msgList
+    msgList,
+    msgUnread
 });
 
 //登入時
