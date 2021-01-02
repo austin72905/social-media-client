@@ -16,7 +16,7 @@ class Chat extends Component {
     state = {
         name: "",
         msg: "",
-        unread:0,
+        unread: 0,
         msgs: [
             {
                 memberid: 0,
@@ -43,6 +43,28 @@ class Chat extends Component {
         }
     }
 
+    handleInput = (e) => {
+        this.setState({ msg: e.target.value })
+    }
+
+    handleEnter = (e)=>{
+        //enter也能輸入訊息
+        if(e.nativeEvent.keyCode === 13){
+            this.sendMsg();
+        }
+    }
+
+    handleInput = (e) => {
+        this.setState({ msg: e.target.value })
+    }
+
+    handleEnter = (e)=>{
+        //enter也能輸入訊息
+        if(e.nativeEvent.keyCode === 13){
+            this.sendMsg();
+        }
+    }
+
     //發送訊息
     sendMsg = () => {
         //取得userid 跟 recieveid
@@ -55,6 +77,8 @@ class Chat extends Component {
             .invoke("SendBothMsg", names[0], names[1], this.state.msg)
             .catch(err => console.log(err));
 
+        //消除輸入框
+        this.inputval = "";
         this.setState({ msg: "" });
 
 
@@ -133,8 +157,8 @@ class Chat extends Component {
         // const names = pathAr[2].split("+");
 
         //撈資料前先把後端資料庫的數據改成read
-        this.props.hubConnection.invoke("ReadMsg",memberid,recieveid)
-        .catch(err => console.log(err));
+        this.props.hubConnection.invoke("ReadMsg", memberid, recieveid)
+            .catch(err => console.log(err));
 
         //如果還沒有撈資料過
         if (this.state.msgs[0].memberid === 0 || this.state.msg.length < 1) {
@@ -146,7 +170,7 @@ class Chat extends Component {
         console.log("有這個實體嗎", this.props);
 
 
-        
+
         this.props.hubConnection.on("SendBothMsg", (user, reciever, input) => {
 
             console.log("有接收到嗎", user, input);
@@ -238,6 +262,7 @@ class Chat extends Component {
                             </div>
 
 
+                            {/*訊息內容 */}
                             {
                                 msgs.map((m, index) => (
                                     m.memberid === parseInt(names[0]) ?
@@ -285,24 +310,15 @@ class Chat extends Component {
 
                         </div>
                     </div>
-
+                    {/*輸入框*/}
                     <nav className="nav fixed-bottom mb-3" role="navigation">
                         <div className="container justify-content-center">
                             <div className="row justify-content-center">
-
-                                <input className="ipsz" type="text" onChange={e => this.setState({ msg: e.target.value })} />
+                                <input className="ipsz" type="text" value={this.state.msg} onChange={this.handleInput} ref={inputval => this.inputval = inputval} onKeyPress={this.handleEnter}/>
                                 <button className="btn btn-secondary" onClick={this.sendMsg}>送出</button>
-
-
-
-
                             </div>
-
                         </div>
-
                     </nav>
-
-
 
                 </div>
 
