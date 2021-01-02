@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import '../../containers/personal/personal.scss';
+import '../../scss/main.scss';
 
 class NotFound extends Component {
 

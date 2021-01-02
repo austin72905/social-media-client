@@ -1,97 +1,21 @@
-.outborder{
-    border: 1px solid #dbdbdb;
-    border: 1px solid rgba(var(--b6a,219,219,219),1);
-    border-radius: 3px;
-    margin: 30px auto 0;
-    max-width: 935px;
-    min-height: 900px;
-    
-    overflow:hidden;
-    border-bottom-style: none;
-    
-    
-}
-/*
-    主要頁面離nav footer 的距離
-*/
-.mcbd{
-    margin-bottom: 80px;
-}
-
-.headphoto{
-    border: 1px solid rgba(0,0,0,.0975);
-    border: 1px solid rgba(var(--jb7,0,0,0),.0975);
-    border-radius: 50%;
-    
-}
-
-.headerdp{
-    display: inline;
-}
-
-.chnsz{
-    font-size: 14px;
-}
-
-.chatbox{
-    border-top-style: none;
-    border-bottom-style: none;
-    border-left-style: none;
-    border-right-style: none;
-}
-
-.ctmsg{
-    border-radius: 10%;
-    border: 1px solid #dbdbdb;
-    border: 1px solid rgba(var(--b6a,219,219,219),1);
-    background-color: #dbdbdb;
-    display: inline-block;
-}
-
-.ctmsgsf{
-    display: inline;
-    margin-left: 70px;
-}
-
-/*未讀訊息*/
-.unread{
-    text-align: center;
-    font-size: 12px;
-    color: white;
-    padding: 1px 5px;
-    border: 1px solid #dbdbdb;
-    border-radius: 50%;
-    background-color:gray;
-}
-
-.mybody{
-    margin-top: 80px;
-}
-
-
-
+/*大頭貼(目前沒用)*/
 .btnnobr{
     border: none;
     background-color:white;
     color: #0275d8;
     
 }
+/*大頭貼(目前沒用)*/
 .btnnobr:focus{
     outline: 0;
 }
 
-
+/*輸入框size*/
 .ipsz{
     max-width: 400;
     width: 400px;
 }
 
-@media (max-width: 965px) and (min-width: 380px){
-
-    .topborder{
-        border-top-style: none;
-    }
-}
 
 @media(max-width: 1000px)and (min-width: 350px){
 
@@ -100,8 +24,3 @@
     }
 }
 
-
-
-.itdtitle{
-    font-weight: bold;
-}

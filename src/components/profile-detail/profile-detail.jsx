@@ -4,6 +4,9 @@ import { withRouter } from 'react-router-dom';
 
 import NotFound from '../not-found/not-found';
 
+import '../../scss/main.scss';
+import './profile-detail.scss';
+
 import { getCookies } from '../../utils/index';
 import man from '../../assets/man.png';
 import woman from '../../assets/woman2.png';

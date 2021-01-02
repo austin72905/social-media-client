@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { connectToHub, getMsg } from '../../redux/actions';
 import { getCookies } from '../../utils/index';
 
-import '../personal/personal.scss';
+import './chat.scss';
+
+import '../../scss/main.scss';
 import man from '../../assets/man.png';
 import woman from '../../assets/woman2.png';
 import '../personal/personal.scss';
@@ -22,7 +24,6 @@ class Chat extends Component {
                 username: "",
             }
         ],
-        //HubConnection: null,
     }
 
 
@@ -71,16 +72,16 @@ class Chat extends Component {
     }
 
     //進入聊天室
-    IntoChat = () => {
+    // IntoChat = () => {
 
-        const path = this.props.location.pathname;
-        const pathAr = path.split("/");
-        const names = pathAr[2].split("+");
-        console.log("聊天名", names);
-        //把自己的memberid 根聊天對象的id 傳到後端，用來存放connectionid
-        this.state.HubConnection.invoke("AddConnectList", names[0], names[1])
-            .catch(err => console.log(err));
-    }
+    //     const path = this.props.location.pathname;
+    //     const pathAr = path.split("/");
+    //     const names = pathAr[2].split("+");
+    //     console.log("聊天名", names);
+    //     //把自己的memberid 根聊天對象的id 傳到後端，用來存放connectionid
+    //     this.state.HubConnection.invoke("AddConnectList", names[0], names[1])
+    //         .catch(err => console.log(err));
+    // }
 
     async componentDidMount() {
         //創建一個實例
@@ -153,8 +154,7 @@ class Chat extends Component {
         console.log("有這個實體嗎", this.props);
 
 
-
-        this.props.hubConnection.on("SendBothMsg", (user, reciever, input) => {
+        this.props.hubConnection.on("RecieveBothMsg", (user, reciever, input) => {
 
             console.log("有接收到嗎", user, input);
             //判斷是哪個用戶說的
@@ -194,8 +194,8 @@ class Chat extends Component {
 
         //過濾到初始值
         const msgs = this.state.msgs.filter(i => i.memberid !== 0);
-        console.log("輸入的訊息", this.state.msg);
-        console.log("現在的訊息狀態", msgs)
+        //console.log("輸入的訊息", this.state.msg);
+        //console.log("現在的訊息狀態", msgs)
 
         return (
             <div className="mybody" >

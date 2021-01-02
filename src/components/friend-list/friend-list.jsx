@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { getCookies } from '../../utils/index';
 
 import './friend-list.scss';
+import '../../scss/main.scss';
 import man from '../../assets/man.png';
 import woman from '../../assets/woman2.png';
 class FriendList extends Component {

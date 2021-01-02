@@ -1,0 +1,51 @@
+/*navbar 排列*/
+.mynav{
+    position: fixed;
+}
+
+/*
+主頁面邊框
+*/
+.outborder{
+    border: 1px solid #dbdbdb;
+    border: 1px solid rgba(var(--b6a,219,219,219),1);
+    border-radius: 3px;
+    margin: 30px auto 0;
+    max-width: 935px;
+    min-height: 900px;
+
+    overflow:hidden;
+    border-bottom-style: none;
+    
+}
+
+/*隔開與navbar 的距離*/
+.mybody{
+    margin-top: 80px;
+}
+
+/*header 排列方式*/
+.headerdp{
+    display: inline;
+}
+/*大頭貼*/
+.headphoto{
+    border: 1px solid rgba(0,0,0,.0975);
+    border: 1px solid rgba(var(--jb7,0,0,0),.0975);
+    border-radius: 50%;
+}
+
+/*
+    chat主要頁面離nav footer 的距離
+*/
+.mcbd{
+    margin-bottom: 80px;
+}
+
+/*手機畫面上邊框消除*/
+@media (max-width: 965px) and (min-width: 380px){
+
+    .topborder{
+        border-top-style: none;
+    }
+}

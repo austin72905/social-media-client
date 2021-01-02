@@ -6,7 +6,8 @@ import { getMsgList } from '../../redux/actions';
 
 import man from '../../assets/man.png';
 import woman from '../../assets/woman2.png';
-import '../personal/personal.scss';
+import './message.scss';
+import '../../scss/main.scss';
 
 class Message extends Component {
 

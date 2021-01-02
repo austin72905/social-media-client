@@ -1,38 +1,17 @@
-.outborder{
-    border: 1px solid #dbdbdb;
-    border: 1px solid rgba(var(--b6a,219,219,219),1);
-    border-radius: 3px;
-    margin: 30px auto 0;
-    max-width: 935px;
-    min-height: 900px;
-    overflow: hidden;
-    border-bottom-style: none;
-    
-}
-
-.headerdp{
-    display: inline;
-}
-
+/*按鈕size*/
 .btnsz{
     width: 200px;
     font-weight: bold;
 }
-
+/*username 排列*/
 .ustl{
     display: inline-block;
 }
 
 @media (max-width: 965px) and (min-width: 380px){
-
-    .topborder{
-        border-top-style: none;
-    }
-
+    
     .btnsz{
         width: 100px; 
     }
 
-    
-    
 }

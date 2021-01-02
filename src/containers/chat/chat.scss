@@ -1,0 +1,40 @@
+/*訊息邊框*/
+.chatbox{
+    border-top-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    border-right-style: none;
+}
+
+/*用戶名*/
+.chnsz{
+    font-size: 14px;
+}
+
+/*訊息條*/
+.ctmsg{
+    border-radius: 10%;
+    border: 1px solid #dbdbdb;
+    border: 1px solid rgba(var(--b6a,219,219,219),1);
+    background-color: #dbdbdb;
+    display: inline-block;
+}
+
+/*對方的訊息條*/
+.ctmsgsf{
+    display: inline;
+    margin-left: 70px;
+}
+
+/*輸入框size*/
+.ipsz{
+    max-width: 400;
+    width: 400px;
+}
+
+@media(max-width: 1000px)and (min-width: 350px){
+
+    .ipsz{
+        width: 300px;
+    }
+}
