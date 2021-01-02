@@ -29,10 +29,11 @@ class NavFooter extends Component {
     getUnreadToTal = (chatid = 0, unread = 0) => {
         let { msgUnread } = this.props;
         let unreadTotal = 0;
-        console.log("裡面是啥", this.props);
-        //0 代表第一次從後端撈資料 ， 其他都是 signalr invoke
+
+        //chatid == 0 代表第一次從後端撈資料 ， 其他都是 signalr invoke
         if (chatid !== 0) {
             if (unread !== 0) {
+                //未讀訊息+1
                 msgUnread[chatid] += 1;
             } else {
                 //把已讀的部分銷掉
@@ -40,7 +41,7 @@ class NavFooter extends Component {
             }
 
         }
-
+        //將物件裡的值相加
         Object.keys(msgUnread).forEach(key => {
             unreadTotal += msgUnread[key];
         });
@@ -48,11 +49,9 @@ class NavFooter extends Component {
     }
 
     async componentDidMount() {
-        console.log("...", this.props)
         const userid = getCookies();
         await this.props.getMsgUnread({ memberid: userid });
         this.getUnreadToTal();
-
         //確保不會 connect on null
         // if(!this.props.hubConnection){
         //     this.props.hubConnection.on("ChangeTotal", (chatid, unread) => {
@@ -63,9 +62,8 @@ class NavFooter extends Component {
         // }
 
 
-
-
     }
+
     //確保不會連到null
     componentDidUpdate() {
         //如果連線到
@@ -75,48 +73,41 @@ class NavFooter extends Component {
 
         if (this.hubstate && this.keepconnect) {
             this.props.hubConnection.on("ChangeTotal", (chatid, unread) => {
-                //         //已讀
+                //處理未讀數量
                 this.getUnreadToTal(chatid, unread);
             })
         }
         //確保on 之後不會重複on
-        if(this.hubstate){
-            this.keepconnect =false;
+        if (this.hubstate) {
+            this.keepconnect = false;
         }
 
-
-
     }
-
+    //點擊導覽列跳轉到指定頁面
     redirectToPage = (nav, e) => {
         e.preventDefault();
         this.setState({ currentPath: nav.path });
-        console.log("now:  ", this.props)
-
         this.props.history.replace(nav.path);
-
     }
 
     render() {
 
-        const { navList, msgUnread } = this.props;
+        const { navList } = this.props;
         const { currentPath, unreadTotal } = this.state;
-        //console.log("未讀型別",msgUnread)
-        //console.log("總未讀",unreadTotal)
+
         return (
             <nav className="nav nav-pills fixed-bottom " role="navigation">
                 <div className="container justify-content-center">
                     <div className="row justify-content-center">
                         {
                             navList.map((nav, index) => (
-                                nav.path !== "/memberinfo" ?
-                                    <div className="col-xs mx-4" key={index}>
-                                        <a href="#" className={`nav-link nav-item ${nav.path === currentPath ? "active" : null}`} onClick={(e) => this.redirectToPage(nav, e)}>
-                                            {nav.icon}
-                                            {nav.path === "/message" && unreadTotal > 0 ? <span className="unreadn">{unreadTotal}</span> : null}
-                                        </a>
-                                    </div> : null
-
+                                <div className="col-xs mx-4" key={index}>
+                                    <a href="#" className={`nav-link nav-item ${nav.path === currentPath ? "active" : null}`} onClick={(e) => this.redirectToPage(nav, e)}>
+                                        {nav.icon}
+                                        {/*只顯示於message的icon、當訊息>0才會顯示*/}
+                                        {nav.path === "/message" && unreadTotal > 0 ? <span className="unreadn">{unreadTotal}</span> : null}
+                                    </a>
+                                </div>
                             ))
                         }
 

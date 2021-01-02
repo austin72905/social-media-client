@@ -61,6 +61,34 @@ class Main extends Component {
         },
     ];
 
+    //尋找路由、切割
+    getPathAndParams = () => {
+        const path = this.props.location.pathname;
+        console.log(path);
+        //切割路由
+        const routeparam = path.split("/");
+        console.log("midroute", routeparam);
+        const route = routeparam[1];
+        let username = "";
+        if (routeparam.length > 2) {
+            username = routeparam[2];
+        }
+        return { path, route, username };
+    }
+
+    //判斷是nav裡的路由還是其他
+    prepareRoute = (path, route) => {
+        //有 nav 的路由
+        let currentNav = this.navlist.find(nav => nav.path === path);
+        console.log("是否找到路徑", currentNav)
+        //其他路徑
+        let otherPath = this.otherList.find(i => i.path.startsWith("/" + route));
+        console.log("其他路徑", otherPath)
+
+        return { currentNav, otherPath };
+
+    }
+
     //發送ajax請求獲取用戶數據
     componentDidMount() {
         const userid = getCookies();
@@ -113,26 +141,14 @@ class Main extends Component {
         }
 
         //如果有，顯示對應的頁面
-        const navlist = this.navlist;
-        const otherlist = this.otherList;
         //現在的路由位置
-        const path = this.props.location.pathname;
-        console.log(path)
+        const { path, route, username } = this.getPathAndParams();
 
         if (path === "/") {
             return <Redirect to="/memberlist" />
         }
 
-        //有 nav 的路由
-        let currentNav = navlist.find(nav => nav.path === path);
-        console.log("是否找到路徑", currentNav)
-
-        //切割路由
-        const routeparam = path.split("/");
-        console.log("midroute", routeparam);
-        //其他路徑
-        let otherPath = otherlist.find(i => i.path.startsWith("/" + routeparam[1]));
-        console.log("其他路徑", otherPath)
+        let { currentNav, otherPath } = this.prepareRoute(path, route);
         //如果輸入奇怪的路徑，導回/memberlist
         if (!otherPath && !currentNav) {
 
@@ -144,9 +160,8 @@ class Main extends Component {
         //js 怪怪的 前面明明判斷!otherPath 就return 應該不會跑下面的，但是他會繼續跑所以要加 if(otherPath) 確保otherPath 不是 undifined
         if (otherPath) {
             if (otherPath.path === "/profile") {
-                //let pathid = path.split("/profile/");
-                //console.log("分割結果",pathid);
-                otherPath.title = routeparam[2];
+                //讓標題顯示去訪問的用戶
+                otherPath.title = username;
             }
         }
 
@@ -172,11 +187,11 @@ class Main extends Component {
 
                 <Switch>
                     {
-                        navlist.map((nav, key) => <Route path={nav.path} exact component={nav.component} key={nav.path} />)
+                        this.navlist.map((nav) => <Route path={nav.path} exact component={nav.component} key={nav.path} />)
                     }
 
                     <Route path="/chat/:userid" component={Chat} />
-                    <Route path="/profile/:userid" component={MyProfile} />
+                    <Route path="/profile/:username" component={MyProfile} />
                     <Route component={MemberList} />
 
                 </Switch>
@@ -189,6 +204,6 @@ class Main extends Component {
 }
 
 export default connect(
-    state => ({ user: state.user, hubConnection: state.hubConnection, msgUnread: state.msgUnread}),
+    state => ({ user: state.user, hubConnection: state.hubConnection, msgUnread: state.msgUnread }),
     { getUser, getPersonal, connectToHub, getMsgUnread } //getUser
 )(Main);

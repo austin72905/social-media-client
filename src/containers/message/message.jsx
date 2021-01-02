@@ -26,20 +26,18 @@ class Message extends Component {
         const { msgList } = this.props;
         this.setState({ msgList });
         this.props.hubConnection.on("SendLastMsg", (msg) => {
-            console.log("接收訊息", msg);
             //如果傳進來的msg 的 chatid 已經存在就覆蓋，不存在就新增
             let msgList = this.state.msgList;
             const msgexisted = msgList.find(i => i.chatid === msg.chatid);
-            //計算未讀訊息量
-            let lastUnreadCount =0;
-            console.log("訊息存在否", msgexisted);
+            //計算對每個用戶的未讀訊息量
+            let lastUnreadCount = 0;
+            //如果已經有聊天過就把原本的內容過濾掉，最後再新增
             if (msgexisted) {
                 msgList = msgList.filter(i => i.chatid !== msg.chatid);
-                lastUnreadCount=msgexisted.unreadcount;
+                lastUnreadCount = msgexisted.unreadcount;
             }
             //統計到最新的未讀數量
-            msg.unreadcount +=lastUnreadCount;
-            console.log("訊息列", msgList);
+            msg.unreadcount += lastUnreadCount;
             msgList.push(msg);
 
 

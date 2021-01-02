@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { HubConnectionBuilder } from '@microsoft/signalr';
-
 
 import { connectToHub, getMsg } from '../../redux/actions';
 import { getCookies } from '../../utils/index';
@@ -14,7 +12,6 @@ import '../personal/personal.scss';
 class Chat extends Component {
 
     state = {
-        name: "",
         msg: "",
         unread: 0,
         msgs: [
@@ -31,7 +28,7 @@ class Chat extends Component {
 
     //自定義的資料存放
     initData = {}
-
+    //初始化資料
     initPassData = () => {
         const path = this.props.location.pathname;
         const pathAr = path.split("/");
@@ -47,20 +44,9 @@ class Chat extends Component {
         this.setState({ msg: e.target.value })
     }
 
-    handleEnter = (e)=>{
+    handleEnter = (e) => {
         //enter也能輸入訊息
-        if(e.nativeEvent.keyCode === 13){
-            this.sendMsg();
-        }
-    }
-
-    handleInput = (e) => {
-        this.setState({ msg: e.target.value })
-    }
-
-    handleEnter = (e)=>{
-        //enter也能輸入訊息
-        if(e.nativeEvent.keyCode === 13){
+        if (e.nativeEvent.keyCode === 13) {
             this.sendMsg();
         }
     }
@@ -68,13 +54,12 @@ class Chat extends Component {
     //發送訊息
     sendMsg = () => {
         //取得userid 跟 recieveid
-        const path = this.props.location.pathname;
-        const pathAr = path.split("/");
-        const names = pathAr[2].split("+");
+        const { memberid, recieveid } = this.initData;
+        const msg = this.state.msg;
 
         //激發 chathub 裡面的方法名
         this.props.hubConnection
-            .invoke("SendBothMsg", names[0], names[1], this.state.msg)
+            .invoke("SendBothMsg", memberid, recieveid, msg)
             .catch(err => console.log(err));
 
         //消除輸入框
@@ -148,13 +133,11 @@ class Chat extends Component {
         // if(!this.props.HubConnection){
         //     await this.props.connectToHub(names[0])
         // }
+
+        //初始化資料
         const data = this.initPassData();
         this.initData = { ...data };
-        console.log("自訂議", this.initData)
         const { memberid, recieveid } = this.initData;
-        // const path = this.props.location.pathname;
-        // const pathAr = path.split("/");
-        // const names = pathAr[2].split("+");
 
         //撈資料前先把後端資料庫的數據改成read
         this.props.hubConnection.invoke("ReadMsg", memberid, recieveid)
@@ -207,15 +190,13 @@ class Chat extends Component {
     render() {
 
         //擷取用戶名
-        const path = this.props.location.pathname;
-        const pathAr = path.split("/");
-        const names = pathAr[2].split("+");
+        const { memberid } = this.initPassData();
 
+        //過濾到初始值
         const msgs = this.state.msgs.filter(i => i.memberid !== 0);
         console.log("輸入的訊息", this.state.msg);
         console.log("現在的訊息狀態", msgs)
-        //console.log("用戶號", names)
-        //console.log("型別", typeof (names[0]))
+
         return (
             <div className="mybody" >
                 <div className="outborder topborder" >
@@ -265,20 +246,17 @@ class Chat extends Component {
                             {/*訊息內容 */}
                             {
                                 msgs.map((m, index) => (
-                                    m.memberid === parseInt(names[0]) ?
+                                    m.memberid === parseInt(memberid) ?
                                         <div className="card col-7 my-2 chatbox" key={index}>
                                             <div className="mt-2">
 
                                                 <div className="headerdp">
-
+                                                    {/*大頭貼*/}
                                                     <div className="">
                                                         <img className="mx-3 headphoto  float-right" src={m.gender === "男" ? man : woman} style={{ "width": 50 }} alt="" />
-
                                                     </div>
 
-
                                                     <div className=" float-right mt-5 ctmsg px-2" >{m.text} </div>
-
 
                                                 </div>
 
@@ -295,7 +273,6 @@ class Chat extends Component {
                                                         <div className="headerdp chnsz" style={{ "verticalAlign": "top" }}>{m.username}</div>
 
                                                     </div>
-
 
                                                     <div className=" ctmsg ctmsgsf px-2">{m.text} </div>
 
@@ -314,7 +291,7 @@ class Chat extends Component {
                     <nav className="nav fixed-bottom mb-3" role="navigation">
                         <div className="container justify-content-center">
                             <div className="row justify-content-center">
-                                <input className="ipsz" type="text" value={this.state.msg} onChange={this.handleInput} ref={inputval => this.inputval = inputval} onKeyPress={this.handleEnter}/>
+                                <input className="ipsz" type="text" value={this.state.msg} onChange={this.handleInput} ref={inputval => this.inputval = inputval} onKeyPress={this.handleEnter} />
                                 <button className="btn btn-secondary" onClick={this.sendMsg}>送出</button>
                             </div>
                         </div>
