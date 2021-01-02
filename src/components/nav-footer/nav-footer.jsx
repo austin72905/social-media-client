@@ -20,11 +20,6 @@ class NavFooter extends Component {
         msgUnread: {}
     }
 
-    //hub 狀態
-    hubstate = false;
-    //是否要繼續連線
-    keepconnect = true;
-
     //計算未讀數量
     getUnreadToTal = (chatid = 0, unread = 0) => {
         let { msgUnread } = this.props;
@@ -48,42 +43,23 @@ class NavFooter extends Component {
     }
 
     async componentDidMount() {
-        console.log("...", this.props)
+        console.log("...",this.props)
         const userid = getCookies();
         await this.props.getMsgUnread({ memberid: userid });
         this.getUnreadToTal();
-
+        
         //確保不會 connect on null
-        // if(!this.props.hubConnection){
-        //     this.props.hubConnection.on("ChangeTotal", (chatid, unread) => {
-        //         //已讀
-        //         this.getUnreadToTal(chatid, unread);
-        //     })
-
-        // }
-
-
-
-
-    }
-    //確保不會連到null
-    componentDidUpdate() {
-        //如果連線到
-        if (this.props.hubConnection) {
-            this.hubstate = true;
-        }
-
-        if (this.hubstate && this.keepconnect) {
+        const ww =await this.props.hubConnection;
+        console.log("hub..",ww)
+        if(this.props.hubConnection){
             this.props.hubConnection.on("ChangeTotal", (chatid, unread) => {
-                //         //已讀
+                //已讀
                 this.getUnreadToTal(chatid, unread);
             })
+            
         }
-        //確保on 之後不會重複on
-        if(this.hubstate){
-            this.keepconnect =false;
-        }
-
+        
+        
 
 
     }
