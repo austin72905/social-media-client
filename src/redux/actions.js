@@ -1,6 +1,6 @@
 import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend,reqMessage,reqMessageList,reqUnreadTotal } from '../api/index';
 import { SUCCESS_CODE } from '../api/respcode';
-import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST,RECIEVE_UNREAD_TOTAL } from './action-types';
+import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST,RECIEVE_UNREAD_TOTAL,RESET_USER_DETAIL } from './action-types';
 
 import { connectHub } from '../api/hubHelper';
 import { getCookies,setCookies,removeCookies } from '../utils/index';
@@ -12,6 +12,8 @@ const errorMsg = (msg) => ({ type: ERR_MSG, data: msg });
 
 const recieveUser = (user) => ({ type: RECIEVE_USER, data: user });
 const resetUser = (msg) => ({ type: RESET_USER, data: msg });
+
+const resetUserDetail = (msg) => ({ type: RESET_USER_DETAIL, data: msg });
 
 const recieveUsers = (user) => ({ type: RECIEVE_USERS, data: user });
 
@@ -220,7 +222,7 @@ export const getUserDetail = ({ memberid, username }) => {
             console.log(result.data)
             dispatch(recieveUser(result.data));
         } else {
-            dispatch(resetUser(result.msg));
+            dispatch(resetUserDetail(result.msg));
         }
 
     }

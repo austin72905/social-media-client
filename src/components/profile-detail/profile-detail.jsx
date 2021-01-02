@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
+import NotFound from '../not-found/not-found';
+
 import { getCookies } from '../../utils/index';
 import man from '../../assets/man.png';
 import woman from '../../assets/woman2.png';
@@ -37,6 +39,10 @@ class ProfileDetail extends Component {
         const userInfo = this.props.userInfo;
         const noContent = this.noContent;
 
+        if(userInfo.memberID===0){
+            return (<NotFound/>);
+        }
+
         return (
             <div className="mybody">
                 <div className="outborder topborder">
@@ -62,6 +68,7 @@ class ProfileDetail extends Component {
                                 <div className="card-body">
                                     <div className="card-title">
                                         <h5>{userInfo.nickname ? userInfo.nickname : noContent}</h5>
+                                        <h5>{userInfo.username ? "( "+userInfo.username+" )" : noContent}</h5>
                                     </div>
                                     <div className="card-text">
                                         <div className="mt-3 ">

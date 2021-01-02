@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import { getCookies } from '../../utils/index';
 import { getUserDetail, addFriend, delFriend } from '../../redux/actions';
@@ -38,13 +39,15 @@ class MyProfile extends Component {
     render() {
 
         //const userInfo = this.props.user;
+        
+
         return (
-            <ProfileDetail userInfo={this.props.user} addFriend={this.addFriend} delFriend={this.delFriend} />
+            <ProfileDetail userInfo={this.props.uerDetail} addFriend={this.addFriend} delFriend={this.delFriend} />
         );
     }
 }
 
 export default connect(
-    state => ({ user: state.user }),
+    state => ({ uerDetail: state.uerDetail }),
     { getUserDetail, addFriend, delFriend }
 )(MyProfile);

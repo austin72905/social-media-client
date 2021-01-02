@@ -24,14 +24,15 @@ class UserList extends Component {
         this.props.history.push(`/chat/${myid}+${userid}`);
     }
 
-    goProfile = (profile ="austin")=>{
+    goProfile = (profile = "austin") => {
         this.props.history.push(`/profile/${profile}`)
     }
 
     render() {
 
-        const { userList } = this.props;
-
+        let { userList } = this.props;
+        const memberid = getCookies();
+        userList = userList.filter(user => user.memberID !== parseInt(memberid));
         return (
             <div className="mybody">
                 <div className="outborder topborder">
@@ -42,7 +43,7 @@ class UserList extends Component {
                                     <div className="card col-7 my-2" key={user.memberID} >
                                         <div className="mt-2">
                                             <div className="headerdp">
-                                                <img className="mx-3 headphoto" src={user.gender==="女"?woman:man} style={{ "width": 90 }} alt="" />
+                                                <img className="mx-3 headphoto" src={user.gender === "女" ? woman : man} style={{ "width": 90 }} alt="" />
                                                 <button className="btn btn-secondary float-right " onClick={() => this.goChat(user.memberID)}>私聊</button>
                                                 <button className="btn btn-danger float-right btnsz btnszmb btn-xs mr-3" onClick={() => this.addFriend(user.memberID)}>加好友</button>
 
@@ -50,8 +51,12 @@ class UserList extends Component {
                                         </div>
 
                                         <div className="card-body">
-                                            <div className="card-title" onClick={()=>this.goProfile(user.username)}>
-                                                <h5>{user.nickname}</h5>
+                                            <div className="card-title" onClick={() => this.goProfile(user.username)}>
+                                                
+                                                    <h5 className="ustl">{user.nickname}</h5>
+                                                    <h6 className="ustl ml-2">{" ( " + user.username + " )"}</h6>
+                                                
+
                                             </div>
                                             <div className="card-text">
                                                 <div>

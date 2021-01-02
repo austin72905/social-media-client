@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-function getRedirectTo(gender, isRegist) {
+function getRedirectTo(isRegist=false) {
     let path = "";
     // if(gender==="男"){
     //     path ="/female";

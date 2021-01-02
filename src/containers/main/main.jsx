@@ -8,10 +8,11 @@ import Message from '../message/message';
 import Personal from '../personal/personal';
 import Friends from '../friends/friends';
 import NavFooter from '../../components/nav-footer/nav-footer';
+import NotFound from '../../components/not-found/not-found';
 import Chat from '../chat/chat';
 import MyProfile from '../profile/profile';
 
-import { getCookies } from '../../utils/index';
+import { getCookies,getRedirectTo } from '../../utils/index';
 import { getUser, getPersonal, connectToHub, getMsgUnread } from '../../redux/actions';
 
 import './main.scss';
@@ -69,11 +70,7 @@ class Main extends Component {
         const routeparam = path.split("/");
         console.log("midroute", routeparam);
         const route = routeparam[1];
-        let username = "";
-        if (routeparam.length > 2) {
-            username = routeparam[2];
-        }
-        return { path, route, username };
+        return { path, route };
     }
 
     //判斷是nav裡的路由還是其他
@@ -135,14 +132,16 @@ class Main extends Component {
         console.log("是否有user", user);
         //如果user 裡面沒有_id 返回null(不做任何顯示)
         if (!user.memberID) {
+            
             return null;
+                
             //會這樣寫是因為登錄過，但目前還沒有登入(redux 管理的user裡沒有_id)
             //之後會再 componentDidMount() 從後台獲取資料 ， 就跑到下面的 else
         }
 
         //如果有，顯示對應的頁面
         //現在的路由位置
-        const { path, route, username } = this.getPathAndParams();
+        const { path, route } = this.getPathAndParams();
 
         if (path === "/") {
             return <Redirect to="/memberlist" />
@@ -161,7 +160,7 @@ class Main extends Component {
         if (otherPath) {
             if (otherPath.path === "/profile") {
                 //讓標題顯示去訪問的用戶
-                otherPath.title = username;
+                otherPath.title = "用戶訊息";
             }
         }
 
@@ -192,7 +191,8 @@ class Main extends Component {
 
                     <Route path="/chat/:userid" component={Chat} />
                     <Route path="/profile/:username" component={MyProfile} />
-                    <Route component={MemberList} />
+                    {/*如果什麼都找不到就到這個*/}
+                    <Route component={NotFound} />
 
                 </Switch>
 

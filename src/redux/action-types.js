@@ -5,6 +5,8 @@ export const ERR_MSG = "error_msg";
 export const RECIEVE_USER = "recieve_user";
 export const RESET_USER = "reset_user";
 
+export const RESET_USER_DETAIL = "reset_user_detail";
+
 export const RECIEVE_USERS = "recieve_users";
 export const RECIEVE_OPTIONS ="recieve_options";
 

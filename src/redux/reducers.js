@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS,RECIEVE_USERS,CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST,RECIEVE_UNREAD_TOTAL } from './action-types';
+import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS, RECIEVE_MSG, RECIEVE_MSG_LIST, RECIEVE_UNREAD_TOTAL,RESET_USER_DETAIL } from './action-types';
 
 import { getRedirectTo } from '../utils/index';
 import { func } from 'prop-types';
@@ -19,7 +19,7 @@ function user(state = initUser, action) {
     switch (action.type) {
         case AUTH_SUCCESS: //data 是user            
             const { gender, isRegist } = action.data;
-            return { ...action.data, redirectTo: getRedirectTo(gender, isRegist) }; //{...state,...action.data} 也可以這樣寫，可以把裡面的值解構出來，並取代
+            return { ...action.data, redirectTo: getRedirectTo(isRegist) }; //{...state,...action.data} 也可以這樣寫，可以把裡面的值解構出來，並取代
         case ERR_MSG:   //data 是 msg
             return { ...state, msg: action.data };
         case RECIEVE_USER:   //data 是 user 
@@ -32,6 +32,33 @@ function user(state = initUser, action) {
             return state;
     }
 };
+
+const initUserDetail = {
+    username: "",
+    nickname: "",
+    gender: "",
+    job: "",
+    state: "",
+    introduce: "",
+    interest: "",
+    preferType: "",
+    memberID: 0,
+}
+
+function uerDetail(state = initUserDetail, action) {
+    switch (action.type) {
+        case RECIEVE_USER:   //data 是 user 
+            console.log("RECIEVE_USER");
+            return action.data; //不需要跳轉
+        case RESET_USER_DETAIL:   //data 是 msg
+            console.log("RESET_USER_DETAIL", { ...initUserDetail, msg: action.data });
+            return { ...initUserDetail, msg: action.data }; //更新失敗就整個頁面讓他清空吧
+        default:
+            return state;
+    }
+}
+
+
 
 const initOption = {
     interests: [""],
@@ -66,10 +93,10 @@ function userList(state = initUserList, action) {
 }
 
 //chathub連線
-const Hubconnection=null;
+const Hubconnection = null;
 
-function hubConnection(state=Hubconnection,action){
-    switch(action.type){
+function hubConnection(state = Hubconnection, action) {
+    switch (action.type) {
         case CONNECT_SUCCESS:
             return action.data;
         default:
@@ -78,10 +105,10 @@ function hubConnection(state=Hubconnection,action){
     }
 }
 
-const initMsg=[]
+const initMsg = []
 
-function msgs(state=initMsg,action){
-    switch(action.type){
+function msgs(state = initMsg, action) {
+    switch (action.type) {
         case RECIEVE_MSG:
             return action.data;
         default:
@@ -89,8 +116,8 @@ function msgs(state=initMsg,action){
     }
 }
 
-function msgList(state=initMsg,action){
-    switch(action.type){
+function msgList(state = initMsg, action) {
+    switch (action.type) {
         case RECIEVE_MSG_LIST:
             return action.data;
         default:
@@ -98,10 +125,10 @@ function msgList(state=initMsg,action){
     }
 }
 
-const ininUnread={};
+const ininUnread = {};
 
-function msgUnread(state=ininUnread,action){
-    switch(action.type){
+function msgUnread(state = ininUnread, action) {
+    switch (action.type) {
         case RECIEVE_UNREAD_TOTAL:
             return action.data;
         default:
@@ -122,6 +149,7 @@ export default combineReducers({
     xxx,
     yyy,
     user, // {}
+    uerDetail,
     selectOption,
     userList,
     //連線實體
