@@ -2,7 +2,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 
 //創建一個實例
 const HubConnection = new HubConnectionBuilder()
-    .withUrl(`${process.env.REACT_APP_URL}/chathub`).withAutomaticReconnect().build();
+    .withUrl(`${process.env.REACT_APP_CHATHUB_URL}/chathub`).withAutomaticReconnect().build();
 
 
 export const connectHub = (memberid) => {

@@ -1,4 +1,4 @@
-import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend,reqMessage,reqMessageList,reqUnreadTotal } from '../api/index';
+import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend,reqMessage,reqMessageList,reqUnreadTotal,reqSaveMsg,reqUpdateUnread } from '../api/index';
 import { SUCCESS_CODE } from '../api/respcode';
 import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST,RECIEVE_UNREAD_TOTAL,RESET_USER_DETAIL } from './action-types';
 
@@ -119,11 +119,11 @@ export const updateUser = (user) => {
 }
 
 //獲取用戶列表
-export const getUser = () => {
+export const getUser = ({ memberid }) => {
 
     //異步ajax
     return async (dispatch) => {
-        const response = await reqUser();
+        const response = await reqUser({ memberid });
         const result = response.data;
         //後端回傳訊息成功
         if (result.code === SUCCESS_CODE) {
@@ -133,11 +133,11 @@ export const getUser = () => {
 }
 
 //獲取朋友列表
-export const getFrined = () => {
+export const getFrined = ({ memberid }) => {
 
     //異步ajax
     return async (dispatch) => {
-        const response = await reqFriend();
+        const response = await reqFriend({ memberid });
         const result = response.data;
         //後端回傳訊息成功
         if (result.code === SUCCESS_CODE) {
@@ -309,5 +309,19 @@ export const getMsgUnread = ({memberid})=>{
         } else {
             console.log("不明原因失敗",result.data)
         }
+    }
+}
+
+//修改成已讀
+export const updateToRead = ({memberid,recieveid})=>{
+    return async (dispatch)=>{
+        const response =await reqUpdateUnread({memberid,recieveid});
+    }
+}
+
+//儲存訊息
+export const saveChatMsgs = ({memberid,recieveid,input})=>{
+    return async (dispatch)=>{
+        const response =await reqSaveMsg({memberid,recieveid,input});
     }
 }

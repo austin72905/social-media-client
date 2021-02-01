@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UserList from '../../components/user-list/user-list';
 import { getUser,addFriend } from '../../redux/actions';
+import { getCookies } from '../../utils/index';
 
 class MemberList extends Component {
 
     //userList = [];
 
     componentDidMount() {
-        this.props.getUser();
+        const memberid = getCookies();
+        this.props.getUser({memberid});
         
     }
 

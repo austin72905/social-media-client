@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import FriendList from '../../components/friend-list/friend-list';
 import { getFrined, delFriend } from '../../redux/actions';
+import { getCookies } from '../../utils/index';
 
 
 
@@ -15,7 +16,8 @@ class Friends extends Component {
     //friendList=[];
     componentDidMount() {
         //console.log("...",this.props.delFriend(this.state));
-        this.props.getFrined();
+        const memberid = getCookies();
+        this.props.getFrined({memberid});
 
     }
 

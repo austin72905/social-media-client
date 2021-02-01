@@ -176,13 +176,9 @@ class Main extends Component {
         }
 
 
-
-
-
-
         return (
             <div>
-
+                {/*上方導覽列*/}
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top mynav">
                     <a className="navbar-brand" >
                         <span className="h4 mx-3 ">{!currentNav ?

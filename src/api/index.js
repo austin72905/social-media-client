@@ -9,10 +9,10 @@ export const reqLogin = ({ username, password }) => ajax(`${process.env.REACT_AP
 export const reqUpdateUser = (user) => ajax(`${process.env.REACT_APP_URL}/memberinfo/update`, user, "POST");
 
 //獲取用戶列表
-export const reqUser = ()=> ajax(`${process.env.REACT_APP_URL}/memberinfo`);
+export const reqUser = ({memberid})=> ajax(`${process.env.REACT_APP_URL}/memberinfo`,{memberid});
 
 //獲取朋友列表
-export const reqFriend =()=>ajax(`${process.env.REACT_APP_URL}/friend`);
+export const reqFriend =({memberid})=>ajax(`${process.env.REACT_APP_URL}/friend`,{memberid});
 
 //加好友
 export const reqAddFriend =({ memberid, friendid })=>ajax(`${process.env.REACT_APP_URL}/friend/add`,{ memberid, friendid },"POST");
@@ -37,3 +37,9 @@ export const reqMessageList= ({memberid})=> ajax(`${process.env.REACT_APP_URL}/m
 
 //獲取未讀訊息總數
 export const reqUnreadTotal = ({memberid})=> ajax(`${process.env.REACT_APP_URL}/message/UnreadMsg`,{memberid});
+
+//將資料庫改成已讀
+export const reqUpdateUnread = ({memberid,recieveid})=> ajax(`${process.env.REACT_APP_URL}/chat/UpToread`,{memberid,recieveid});
+
+//發送訊息時，將資料存進資料庫
+export const reqSaveMsg = ({memberid,recieveid,input})=> ajax(`${process.env.REACT_APP_URL}/chat/SaveMsgs`,{memberid,recieveid,input},"POST");

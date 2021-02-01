@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { connectToHub, getMsg } from '../../redux/actions';
+import { connectToHub, getMsg,saveChatMsgs,updateToRead } from '../../redux/actions';
 import { getCookies } from '../../utils/index';
 
 import './chat.scss';
@@ -58,9 +58,12 @@ class Chat extends Component {
         const { memberid, recieveid } = this.initData;
         const msg = this.state.msg;
 
+        //儲存訊息
+        this.props.saveChatMsgs({memberid,recieveid,input:msg});
+
         //激發 chathub 裡面的方法名
         this.props.hubConnection
-            .invoke("SendBothMsg", memberid, recieveid, msg)
+            .invoke("SendBothMsg", memberid,recieveid,msg)
             .catch(err => console.log(err));
 
         //消除輸入框
@@ -117,13 +120,13 @@ class Chat extends Component {
         //         this.setState({ msgs });
         //     })
         //     //測試
-        //     // this.state.HubConnection.on("IntoChat", (content) => {
-        //     //     const text = content;
-        //     //     //把講過的話組合成陣列
-        //     //     const msgs = this.state.msgs.concat([text]);
-        //     //     //刷新讓他渲染
-        //     //     this.setState({ msgs });
-        //     // })
+            // this.state.HubConnection.on("IntoChat", (content) => {
+            //     const text = content;
+            //     //把講過的話組合成陣列
+            //     //const msgs = this.state.msgs.concat([text]);
+            //     //刷新讓他渲染
+            //     //this.setState({ msgs });
+            // })
 
 
 
@@ -141,8 +144,10 @@ class Chat extends Component {
         const { memberid, recieveid } = this.initData;
 
         //撈資料前先把後端資料庫的數據改成read
-        this.props.hubConnection.invoke("ReadMsg", memberid, recieveid)
-            .catch(err => console.log(err));
+        // this.props.hubConnection.invoke("ReadMsg", memberid, recieveid)
+        //     .catch(err => console.log(err));
+        this.props.updateToRead({ memberid, recieveid });
+
 
         //如果還沒有撈資料過
         if (this.state.msgs[0].memberid === 0 || this.state.msg.length < 1) {
@@ -154,7 +159,7 @@ class Chat extends Component {
         console.log("有這個實體嗎", this.props);
 
 
-        this.props.hubConnection.on("RecieveBothMsg", (user, reciever, input) => {
+        this.props.hubConnection.on("RecieveBothMsg", (user, input) => {
 
             console.log("有接收到嗎", user, input);
             //判斷是哪個用戶說的
@@ -306,5 +311,5 @@ class Chat extends Component {
 
 export default connect(
     state => ({ hubConnection: state.hubConnection, msgs: state.msgs }),
-    { connectToHub, getMsg }
+    { connectToHub, getMsg,saveChatMsgs,updateToRead }
 )(Chat);

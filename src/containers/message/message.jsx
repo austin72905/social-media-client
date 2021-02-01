@@ -64,7 +64,7 @@ class Message extends Component {
 
                                         <div className="headerdp">
                                             <img className="mx-3 headphoto" src={msg.gender === "男" ? man : woman} style={{ "width": 50 }} alt="" />
-                                            {msg.chatname}
+                                            {msg.chatname == null?msg.username:msg.chatname}
                                         </div>
 
                                     </div>
