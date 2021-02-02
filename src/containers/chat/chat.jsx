@@ -144,8 +144,9 @@ class Chat extends Component {
         const { memberid, recieveid } = this.initData;
 
         //撈資料前先把後端資料庫的數據改成read
-        // this.props.hubConnection.invoke("ReadMsg", memberid, recieveid)
-        //     .catch(err => console.log(err));
+        this.props.hubConnection.invoke("ReadMsg", memberid, recieveid)
+            .catch(err => console.log(err));
+            
         this.props.updateToRead({ memberid, recieveid });
 
 

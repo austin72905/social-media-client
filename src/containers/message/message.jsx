@@ -40,9 +40,37 @@ class Message extends Component {
             //統計到最新的未讀數量
             msg.unreadcount += lastUnreadCount;
             msgList.push(msg);
+            console.log("最後列表", msgList)
 
 
             this.setState({ msgList });
+        })
+
+        //當進入過聊天室，將unreadcount 重置為0
+        this.props.hubConnection.on("ChangeToRead", (userid, read) => {
+            console.log("進來了")
+            //如果傳進來的msg 的 chatid 已經存在就覆蓋，不存在就新增
+            let msgList = this.state.msgList;
+            const msgexisted = msgList.find(i => i.chatid == userid);
+            //計算對每個用戶的未讀訊息量
+
+            //如果已經有聊天過就把原本的內容過濾掉，最後再新增
+            if (msgexisted) {
+
+                //把那個id 的 的 unread 改成0
+                msgList.forEach(msg => {
+                    if (msg.chatid == userid) {
+                        msg.unreadcount = read
+                    }
+                })
+                console.log("修改已讀後列表", msgList)
+                this.setState({ msgList });
+            }
+            
+            
+
+
+            
         })
     }
 
@@ -64,7 +92,7 @@ class Message extends Component {
 
                                         <div className="headerdp">
                                             <img className="mx-3 headphoto" src={msg.gender === "男" ? man : woman} style={{ "width": 50 }} alt="" />
-                                            {msg.chatname == null?msg.username:msg.chatname}
+                                            {msg.chatname == null ? msg.username : msg.chatname}
                                         </div>
 
                                     </div>
