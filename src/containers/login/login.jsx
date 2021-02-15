@@ -5,6 +5,7 @@ import {Redirect} from 'react-router-dom';
 
 import { login } from '../../redux/actions';
 import Logo from '../../components/logo/logo'
+import { getCookies } from '../../utils/index';
 //登入路由
 class Login extends Component {
 
@@ -36,7 +37,12 @@ class Login extends Component {
 
 
     render() {
-        
+        //讀取cookie
+        const userid = getCookies();
+        if(userid){
+            return <Redirect to="/memberlist"/>
+        }
+
         //讀取redux管理的訊息
         const {msg,redirectTo} =this.props.user;
         //如果有值就跳轉
@@ -44,6 +50,8 @@ class Login extends Component {
         if(redirectTo){
             return <Redirect to={redirectTo}/>
         }
+
+        
 
         return (
             <div>

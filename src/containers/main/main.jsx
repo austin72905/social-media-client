@@ -131,7 +131,7 @@ class Main extends Component {
     render() {
         //讀取cookie
         const userid = getCookies();
-
+        
         //如果cookie 沒有值，回Login
         if (!userid) {
             return <Redirect to="login" />
