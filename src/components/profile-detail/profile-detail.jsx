@@ -70,7 +70,7 @@ class ProfileDetail extends Component {
                                 </div>
                                 <div className="card-body">
                                     <div className="card-title">
-                                        <h5>{userInfo.nickname ? userInfo.nickname : noContent}</h5>
+                                        <h5>{userInfo.nickname ? userInfo.nickname : ""}</h5>
                                         <h5>{userInfo.username ? "( "+userInfo.username+" )" : noContent}</h5>
                                     </div>
                                     <div className="card-text">
@@ -95,7 +95,7 @@ class ProfileDetail extends Component {
                                         </div>
                                         <div className="mt-3">
                                             <div className="itdtitle">自我介紹</div>
-                                            <div className="mt-3">{userInfo.introduce}</div>
+                                            <div className="mt-3">{userInfo.introduce?userInfo.introduce:noContent}</div>
 
                                         </div>
 

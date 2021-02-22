@@ -23,7 +23,7 @@ class FriendList extends Component {
 
     goChat = (userid) => {
         const myid = getCookies();
-        this.props.history.push(`/chat/${myid}+${userid}`)
+        this.props.history.push(`/chat/${userid}`)
     }
 
     goProfile = (profile = "austin") => {

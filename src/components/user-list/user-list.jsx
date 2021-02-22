@@ -22,10 +22,11 @@ class UserList extends Component {
 
     goChat = (userid = 1) => {
         const myid = getCookies();
-        this.props.history.push(`/chat/${myid}+${userid}`);
+        this.props.history.push(`/chat/${userid}`);
     }
 
     goProfile = (profile = "austin") => {
+        console.log("搜尋姓名: ",profile);
         this.props.history.push(`/profile/${profile}`)
     }
 
@@ -35,7 +36,7 @@ class UserList extends Component {
         const memberid = getCookies();
         userList = userList.filter(user => user.memberID !== parseInt(memberid));
         return (
-            <div className="mybody">
+            <div className="mybody ">
                 <div className="outborder topborder">
                     <div className="container mt-3 ">
                         <div className="row justify-content-center">

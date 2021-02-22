@@ -13,6 +13,8 @@ class Register extends Component {
         password: '',
         confirm: '',
         gender: '',
+        loading: false,
+        
     };
 
     //監聽選擇的性別
@@ -31,6 +33,8 @@ class Register extends Component {
     };
     //註冊
     register = () => {
+        this.setState({loading:true});
+        console.log("註冊資料: ",this.state)
         this.props.register(this.state);
     };
 
@@ -38,6 +42,13 @@ class Register extends Component {
     redirectLogin = () => {
         this.props.history.replace('/login');
     };
+
+    componentDidUpdate(prevprops){
+        const {msg,redirectTo} =this.props.user;
+        if(this.props.user!==null &&this.state.loading){
+            this.setState({loading:false});
+        }
+    }
 
     render() {
         const { gender } = this.state;

@@ -12,7 +12,7 @@ class Login extends Component {
     state={
         username:'',
         password:'',
-
+        loading:false,
     };
  
 
@@ -26,6 +26,7 @@ class Login extends Component {
     };
     //註冊
     login = ()=>{
+        this.setState({loading:true});
         this.props.login(this.state);
     };
 
@@ -33,6 +34,14 @@ class Login extends Component {
     redirectRegis=()=>{
         this.props.history.replace('/register');
     };
+
+
+    //
+    componentDidUpdate(prevprops){
+        if(this.props.user!==null &&this.state.loading){
+            this.setState({loading:false});
+        }
+    }
 
 
 
@@ -47,6 +56,34 @@ class Login extends Component {
         const {msg,redirectTo} =this.props.user;
         //如果有值就跳轉
         console.log("跳轉路徑",redirectTo);
+
+        //解決要重覆登入的問題
+        if(!redirectTo &&this.state.loading){
+            return (
+                <div>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <a className="navbar-brand" >
+                        <span className="h4 mx-3 ">React Social Media App</span>
+                    </a>
+                </nav>
+                <p></p>
+                <Logo></Logo>
+
+                <div className="container mt-3">
+                    <div className="row justify-content-center">
+
+                        <div>
+                            loading....
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+            </div>
+            )
+        }
+
         if(redirectTo){
             return <Redirect to={redirectTo}/>
         }

@@ -17,6 +17,7 @@
     
     overflow: hidden;
     border-bottom-style: none;
+    background-color:#e3edf1;
     
 }
 
@@ -24,7 +25,22 @@
 .mybody{
     margin-top: 80px;
     
+    
+    
 }
+
+body{
+    
+    opacity: 0.97;
+    background: url(../assets/mouse.jpg);
+    /*圖片覆蓋整個畫面*/
+    background-size: cover;
+    /*背景圖片不會跟著滑鼠*/
+    background-attachment: fixed;
+
+}
+
+
 
 /*header 排列方式*/
 .headerdp{

@@ -24,7 +24,7 @@ function ajax(url, data = {}, method = "GET") {
         console.log("請求地址get",url)
         return axios.get(url);
     }
-
+    console.log("請求參數data",data);
     return axios.post(url, data);
 }
 

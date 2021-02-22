@@ -33,11 +33,11 @@ class Chat extends Component {
     initPassData = () => {
         const path = this.props.location.pathname;
         const pathAr = path.split("/");
-        const names = pathAr[2].split("+");
-        const userid = getCookies();
+        const name = pathAr[2];
+        const myId = getCookies();
         return {
-            memberid: userid,
-            recieveid: names[1],
+            memberid: myId,
+            recieveid: name,
         }
     }
 
@@ -90,17 +90,22 @@ class Chat extends Component {
     }
 
     //接收訊息時，會滾動到最下部
-    handleScroll = ()=>{
+    handleScroll = (isRecieve=false)=>{
         //看一下用戶現在高度，如果他在往上看訊息，就不用到最下面
         const currentHeight =window.scrollY;
+        //console.log("視窗卷軸",window.scrollY)
         let height =document.body.scrollHeight;
-        
+        //.console.log("體高度",height)
+        if(isRecieve){
+            if(height-currentHeight<1000){
+                //滑動到最下面
+                window.scroll(0,height);
+            }
+        }else{
             //滑動到最下面
-        window.scroll(0,height);
-        
-        
-        
-        
+            window.scroll(0,height);
+        }
+  
     }
 
     //進入聊天室
@@ -172,7 +177,7 @@ class Chat extends Component {
         // window.addEventListener("scroll",_this.handleScroll
         // )
         
-
+        
         //初始化資料
         const data = this.initPassData();
         this.initData = { ...data };
@@ -218,6 +223,8 @@ class Chat extends Component {
             //如果是別人傳的就不用刷到底
             if(memid == memberid){
                 this.handleScroll();
+            }else{
+                this.handleScroll(true);
             }
            
         })

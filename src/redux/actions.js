@@ -1,9 +1,9 @@
-import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend,reqMessage,reqMessageList,reqUnreadTotal,reqSaveMsg,reqUpdateUnread } from '../api/index';
+import { reqRegister, reqLogin, reqUpdateUser, reqUser, reqPersonal, reqUserDetail, reqSelectOption, reqFriend, reqAddFriend, reqDeleteFriend, reqMessage, reqMessageList, reqUnreadTotal, reqSaveMsg, reqUpdateUnread } from '../api/index';
 import { SUCCESS_CODE } from '../api/respcode';
-import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS,RECIEVE_MSG,RECIEVE_MSG_LIST,RECIEVE_UNREAD_TOTAL,RESET_USER_DETAIL } from './action-types';
+import { AUTH_SUCCESS, ERR_MSG, RECIEVE_USER, RESET_USER, RECIEVE_OPTIONS, RECIEVE_USERS, CONNECT_SUCCESS, RECIEVE_MSG, RECIEVE_MSG_LIST, RECIEVE_UNREAD_TOTAL, RESET_USER_DETAIL } from './action-types';
 
 import { connectHub } from '../api/hubHelper';
-import { getCookies,setCookies,removeCookies } from '../utils/index';
+import { getCookies, setCookies, removeCookies } from '../utils/index';
 
 
 //同步 (要分發的action)
@@ -23,22 +23,26 @@ const recieveOptions = (options) => ({ type: RECIEVE_OPTIONS, data: options });
 const recieveConnectHub = (hubConnection) => ({ type: CONNECT_SUCCESS, data: hubConnection });
 
 //獲取訊息
-const recieveMsg =(data)=>({type: RECIEVE_MSG,data:data});
+const recieveMsg = (data) => ({ type: RECIEVE_MSG, data: data });
 
-const recieveMsgList=(data)=>({type:RECIEVE_MSG_LIST,data:data});
+const recieveMsgList = (data) => ({ type: RECIEVE_MSG_LIST, data: data });
 
-const recieveUnreadTotal = (data)=>({type: RECIEVE_UNREAD_TOTAL,data:data});
+const recieveUnreadTotal = (data) => ({ type: RECIEVE_UNREAD_TOTAL, data: data });
 
 //http://localhost:56825/register
 
 //異步
 export const register = (user) => {
 
-    const { username, password, confirm } = user;
+    const { username, password, gender, confirm } = user;
     //前端驗證輸入資料是否正確
     if (!username) {
         return errorMsg("用戶名不得為空")
-    } else if (password !== confirm) {
+
+    } else if (!gender) {
+        return errorMsg("性別不得為空")
+    }
+    else if (password !== confirm) {
         //異步的才需要dispatch
         return errorMsg("2次密碼不一致")
     }
@@ -61,6 +65,9 @@ export const register = (user) => {
             //設置Cookie
             setCookies(result.data.memberID);
             //Cookies.set("userid", result.data.memberID, { expires: 7 });
+            setCookies(result.data.username, "username");
+            //設定token
+            setCookies(result.token, "token");
             //分發(dispatch) 成功的action
             dispatch(authSucess(result.data));
         } else {
@@ -90,8 +97,13 @@ export const login = (user) => {
             console.log(result);
             //設置Cookie
             const userid = getCookies();
-            if (!userid) {
+            const username = getCookies("username");
+            const token = getCookies("token");
+            if (!userid || !token || !username) {
                 setCookies(result.data.memberID);
+                setCookies(result.data.username, "username");
+                //設定token
+                setCookies(result.token, "token");
                 //Cookies.set("userid", result.data.memberID, { expires: 7 });
             }
             //分發(dispatch) 成功的action
@@ -104,11 +116,12 @@ export const login = (user) => {
     }
 }
 
-export const updateUser = (user) => {
+export const updateUser = (memberid,user) => {
+    const { job, username, nickname, state, preferType, interest, introduce } = user;
 
     //返回一個函數
     return async (dispatch) => {
-        const response = await reqUpdateUser(user);
+        const response = await reqUpdateUser(memberid,{ job, username, nickname, state, preferType, interest, introduce });
         const reult = response.data;
         if (reult.code === SUCCESS_CODE) {//更新成功: data
             dispatch(recieveUser(reult.data));
@@ -212,10 +225,10 @@ export const getSelectOption = () => {
 }
 
 //獲取用戶信息
-export const getUserDetail = ({ memberid, username }) => {
+export const getUserDetail = ({ memberid, userprofile }) => {
     console.log("跑getUserDetail");
     return async (dispatch) => {
-        const response = await reqUserDetail({ memberid, username });
+        const response = await reqUserDetail({ memberid, userprofile });
         const result = response.data;
         //後端回傳訊息成功
         if (result.code === SUCCESS_CODE) {
@@ -255,73 +268,73 @@ export const connectToHub = (memberid) => {
         // HubConnection.invoke("AddConnectList", memberid, "")
         //     .catch(err => console.log(err));
 
-        if(result.hub){
+        if (result.hub) {
             dispatch(recieveConnectHub(result.hub));
-        }else{
+        } else {
 
         }
 
-        
-        
-        
+
+
+
     }
 }
 
 //獲取訊息
-export const getMsg =({memberid,recieveid})=>{
-    return async (dispatch)=>{
-        const response = await reqMessage({memberid,recieveid});
-        const result= response.data;
+export const getMsg = ({ memberid, recieveid }) => {
+    return async (dispatch) => {
+        const response = await reqMessage({ memberid, recieveid });
+        const result = response.data;
         //後端回傳訊息成功
         if (result.code === SUCCESS_CODE) {
             console.log(result.data)
             dispatch(recieveMsg(result.data));
         } else {
-            console.log("不明原因失敗",result.data)
+            console.log("不明原因失敗", result.data)
         }
-        
+
     }
 }
 
 //獲取對每個用戶的最後訊息
-export const getMsgList =({memberid})=>{
-    return async (dispatch) =>{
-        const response =await reqMessageList({memberid});
-        const result =response.data;
+export const getMsgList = ({ memberid }) => {
+    return async (dispatch) => {
+        const response = await reqMessageList({ memberid });
+        const result = response.data;
         //後端回傳訊息成功
         if (result.code === SUCCESS_CODE) {
             console.log(result.data)
             dispatch(recieveMsgList(result.data));
         } else {
-            console.log("不明原因失敗",result.data)
+            console.log("不明原因失敗", result.data)
         }
     }
 }
 
-export const getMsgUnread = ({memberid})=>{
-    return async (dispatch)=>{
-        const response =await reqUnreadTotal({memberid});
-        const result =response.data;
+export const getMsgUnread = ({ memberid }) => {
+    return async (dispatch) => {
+        const response = await reqUnreadTotal({ memberid });
+        const result = response.data;
         //後端回傳訊息成功
         if (result.code === SUCCESS_CODE) {
             console.log(result.data)
             dispatch(recieveUnreadTotal(result.data));
         } else {
-            console.log("不明原因失敗",result.data)
+            console.log("不明原因失敗", result.data)
         }
     }
 }
 
 //修改成已讀
-export const updateToRead = ({memberid,recieveid})=>{
-    return async (dispatch)=>{
-        const response =await reqUpdateUnread({memberid,recieveid});
+export const updateToRead = ({ memberid, recieveid }) => {
+    return async (dispatch) => {
+        const response = await reqUpdateUnread({ memberid, recieveid });
     }
 }
 
 //儲存訊息
-export const saveChatMsgs = ({memberid,recieveid,input})=>{
-    return async (dispatch)=>{
-        const response =await reqSaveMsg({memberid,recieveid,input});
+export const saveChatMsgs = ({ memberid, recieveid, input }) => {
+    return async (dispatch) => {
+        const response = await reqSaveMsg({ memberid, recieveid, input });
     }
 }

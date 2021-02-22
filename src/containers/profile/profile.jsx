@@ -28,7 +28,7 @@ class MyProfile extends Component {
         const path = this.props.location.pathname;
         const routeparam = path.split("/");
         console.log("用戶資料", routeparam);
-        this.props.getUserDetail({ memberid, username: routeparam[2] });
+        this.props.getUserDetail({ memberid, userprofile: routeparam[2] });
     }
 
     // goChat = (userid = 1) => {

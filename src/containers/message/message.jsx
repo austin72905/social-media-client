@@ -18,7 +18,7 @@ class Message extends Component {
 
     goToChat = (userid = 1) => {
         const myid = getCookies();
-        this.props.history.push(`/chat/${myid}+${userid}`)
+        this.props.history.push(`/chat/${userid}`)
     }
 
     async componentDidMount() {
