@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { getCookies } from '../../utils/index';
@@ -66,11 +66,11 @@ class Message extends Component {
                 console.log("修改已讀後列表", msgList)
                 this.setState({ msgList });
             }
-            
-            
 
 
-            
+
+
+
         })
     }
 
@@ -86,7 +86,7 @@ class Message extends Component {
 
 
                             {/*註解..當js寫*/}
-                            {msgList.map((msg, index) => (
+                            {/* {msgList.map((msg, index) => (
                                 <div className="card col-7 my-2" onClick={() => this.goToChat(msg.chatid)} key={index}>
                                     <div className="mt-2">
 
@@ -103,57 +103,10 @@ class Message extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
+                            {msgList !==[]?<MsgBox msgList={msgList} goToChat={this.goToChat}/>:null}
 
-                            <div className="card col-7 my-2" onClick={this.goToChat}>
-                                <div className="mt-2">
 
-                                    <div className="headerdp">
-                                        <img className="mx-3 headphoto" src={woman} style={{ "width": 50 }} alt="" />
-                                        台北張阿姨
-
-                                    </div>
-
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-text">
-                                        今晚...我想來點麥當勞的薯條配可樂
-                                        <span className="unread float-right">1</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card col-7 my-2">
-                                <div className="mt-2">
-
-                                    <div className="headerdp">
-                                        <img className="mx-3 headphoto" src={woman} style={{ "width": 50 }} alt="" />
-                                        香港趙阿姨
-                                    </div>
-
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-text">
-                                        小鮮肉，今晚來找我嗎?
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card col-7 my-2">
-                                <div className="mt-2">
-
-                                    <div className="headerdp">
-                                        <img className="mx-3 headphoto" src={woman} style={{ "width": 50 }} alt="" />
-                                        內湖潘阿姨
-                                    </div>
-
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-text">
-                                        今晚來陪我，就算你PS5
-                                    </div>
-                                </div>
-                            </div>
 
                         </div>
 
@@ -165,6 +118,36 @@ class Message extends Component {
         );
     }
 }
+
+
+
+function MsgBox(props) {
+    return (
+        <Fragment>
+            {props.msgList.map((msg, index) => (
+                <div className="card col-7 my-2" onClick={() => props.goToChat(msg.chatid)} key={index}>
+                    <div className="mt-2">
+
+                        <div className="headerdp">
+                            <img className="mx-3 headphoto" src={msg.gender === "男" ? man : woman} style={{ "width": 50 }} alt="" />
+                            {msg.chatname == null ? msg.username : msg.chatname}
+                        </div>
+
+                    </div>
+                    <div className="card-body">
+                        <div className="card-text">
+                            {msg.text}
+                            {msg.unreadcount > 0 ? <span className="unread float-right">{msg.unreadcount}</span> : null}
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </Fragment>
+
+    );
+}
+
+
 
 export default connect(
     state => ({ user: state.user, msgList: state.msgList, hubConnection: state.hubConnection }),

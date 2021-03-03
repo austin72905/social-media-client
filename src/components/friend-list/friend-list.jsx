@@ -70,57 +70,7 @@ class FriendList extends Component {
                                         </div>
                                     </div>))
                             }
-                            <div className="card col-7 my-2">
-                                <div className="mt-2">
-
-                                    <div className="headerdp">
-                                        <img className="mx-3 headphoto" src={woman} style={{ "width": 90 }} alt="" />
-                                        <button className="btn btn-secondary float-right " onClick={() => this.goChat()}>私聊</button>
-                                        <button className="btn btn-outline-secondary float-right btnsz mr-3">解除好友</button>
-
-                                    </div>
-
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-title">
-                                        <h5>台北張阿姨</h5>
-                                    </div>
-                                    <div className="card-text">
-                                        個人訊息
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card col-7 my-2">
-                                <div className="">
-                                    大頭貼
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-title">
-                                        <h5>日本石田阿姨</h5>
-                                    </div>
-
-                                    <div className="card-text">
-                                        個人訊息
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div className="card col-7 my-2">
-                                <div className="">
-                                    大頭貼
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-title">
-                                        <h5>台北潘阿姨</h5>
-                                    </div>
-                                    <div className="card-text">
-                                        個人訊息
-                                    </div>
-                                </div>
-                            </div>
-
+                            
                         </div>
                     </div>
                 </div>

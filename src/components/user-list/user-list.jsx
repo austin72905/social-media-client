@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ class UserList extends Component {
     }
 
     goProfile = (profile = "austin") => {
-        console.log("搜尋姓名: ",profile);
+        console.log("搜尋姓名: ", profile);
         this.props.history.push(`/profile/${profile}`)
     }
 
@@ -40,69 +40,8 @@ class UserList extends Component {
                 <div className="outborder topborder">
                     <div className="container mt-3 ">
                         <div className="row justify-content-center">
-                            {
-                                userList.map(user => (
-                                    <div className="card col-7 my-2" key={user.memberID} >
-                                        <div className="mt-2">
-                                            <div className="headerdp">
-                                                <img className="mx-3 headphoto" src={user.gender === "女" ? woman : man} style={{ "width": 90 }} alt="" />
-                                                <button className="btn btn-secondary float-right " onClick={() => this.goChat(user.memberID)}>私聊</button>
-                                                <button className="btn btn-danger float-right btnsz btnszmb btn-xs mr-3" onClick={() => this.addFriend(user.memberID)}>加好友</button>
-
-                                            </div>
-                                        </div>
-
-                                        <div className="card-body">
-                                            <div className="card-title" onClick={() => this.goProfile(user.username)}>
-                                                
-                                                    <h5 className="ustl">{user.nickname}</h5>
-                                                    <h6 className="ustl ml-2">{" ( " + user.username + " )"}</h6>
-                                                
-
-                                            </div>
-                                            <div className="card-text">
-                                                <div>
-                                                    {user.introduce}
-                                                </div>
-                                                <div>
-                                                    {user.state}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>))
-                            }
-
-
-                            <div className="card col-7 my-2">
-                                <div className="">
-                                    大頭貼
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-title">
-                                        <h5>內湖王阿姨</h5>
-                                    </div>
-                                    <div className="card-text">
-                                        個人訊息
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card col-7 my-2">
-                                <div className="">
-                                    大頭貼
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-title">
-                                        <h5>香港趙阿姨</h5>
-                                    </div>
-                                    <div className="card-text">
-                                        個人訊息
-                                    </div>
-                                </div>
-                            </div>
-
-
+                            
+                            <UserListContent userList={userList} goChat={this.goChat} goProfile={this.goProfile} addFriend={this.addFriend}/>
 
                         </div>
                     </div>
@@ -113,5 +52,47 @@ class UserList extends Component {
         );
     }
 }
+
+
+function UserListContent(props) {
+    return (
+        <Fragment>
+            {
+                props.userList.map(user => (
+                    <div className="card col-7 my-2" key={user.memberID} >
+                        <div className="mt-2">
+                            <div className="headerdp">
+                                <img className="mx-3 headphoto" src={user.gender === "女" ? woman : man} style={{ "width": 90 }} alt="" />
+                                <button className="btn btn-secondary float-right " onClick={() => props.goChat(user.memberID)}>私聊</button>
+                                <button className="btn btn-danger float-right btnsz btnszmb btn-xs mr-3" onClick={() => props.addFriend(user.memberID)}>加好友</button>
+
+                            </div>
+                        </div>
+
+                        <div className="card-body">
+                            <div className="card-title" onClick={() => props.goProfile(user.username)}>
+
+                                <h5 className="ustl">{user.nickname}</h5>
+                                <h6 className="ustl ml-2">{" ( " + user.username + " )"}</h6>
+
+
+                            </div>
+                            <div className="card-text">
+                                <div>
+                                    {user.introduce}
+                                </div>
+                                <div>
+                                    {user.state}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>))
+            }
+
+        </Fragment>
+    );
+}
+
 
 export default withRouter(UserList);

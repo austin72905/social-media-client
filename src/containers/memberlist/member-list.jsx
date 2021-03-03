@@ -11,6 +11,7 @@ class MemberList extends Component {
     componentDidMount() {
         const memberid = getCookies();
         this.props.getUser({memberid});
+        window.scrollTo(0, 0);
         
     }
 

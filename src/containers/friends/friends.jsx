@@ -18,6 +18,7 @@ class Friends extends Component {
         //console.log("...",this.props.delFriend(this.state));
         const memberid = getCookies();
         this.props.getFrined({memberid});
+        window.scrollTo(0, 0);
 
     }
 

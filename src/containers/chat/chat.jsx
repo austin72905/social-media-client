@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import { connectToHub, getMsg,saveChatMsgs,updateToRead } from '../../redux/actions';
+import { connectToHub, getMsg, saveChatMsgs, updateToRead } from '../../redux/actions';
 import { getCookies } from '../../utils/index';
 
 import './chat.scss';
@@ -59,11 +59,11 @@ class Chat extends Component {
         const msg = this.state.msg;
 
         //儲存訊息
-        this.props.saveChatMsgs({memberid,recieveid,input:msg});
+        this.props.saveChatMsgs({ memberid, recieveid, input: msg });
 
         //激發 chathub 裡面的方法名
         this.props.hubConnection
-            .invoke("SendBothMsg", memberid,recieveid,msg)
+            .invoke("SendBothMsg", memberid, recieveid, msg)
             .catch(err => console.log(err));
 
         //消除輸入框
@@ -76,36 +76,36 @@ class Chat extends Component {
     }
 
     //test
-    toBottom = ()=>{
-        if(this.bottomEnd){
-            console.log("底部的內容",this.bottomEnd) //<div class="toBottom"></div>  會打印出標籤
+    toBottom = () => {
+        if (this.bottomEnd) {
+            console.log("底部的內容", this.bottomEnd) //<div class="toBottom"></div>  會打印出標籤
             //所以可以取得這個標籤理的元素
-            console.log("下拉條高度",document.body.scrollHeight)
-            console.log("網頁可見高度",document.body.clientHeight)
-            console.log("目前高度",document.body.scrollTop)
-            console.log("視窗高度",window.innerHeight)
-            console.log("視窗卷軸",window.scrollY)
+            console.log("下拉條高度", document.body.scrollHeight)
+            console.log("網頁可見高度", document.body.clientHeight)
+            console.log("目前高度", document.body.scrollTop)
+            console.log("視窗高度", window.innerHeight)
+            console.log("視窗卷軸", window.scrollY)
             //window.scrollY = document.body.scrollHeight
         }
     }
 
     //接收訊息時，會滾動到最下部
-    handleScroll = (isRecieve=false)=>{
+    handleScroll = (isRecieve = false) => {
         //看一下用戶現在高度，如果他在往上看訊息，就不用到最下面
-        const currentHeight =window.scrollY;
+        const currentHeight = window.scrollY;
         //console.log("視窗卷軸",window.scrollY)
-        let height =document.body.scrollHeight;
+        let height = document.body.scrollHeight;
         //.console.log("體高度",height)
-        if(isRecieve){
-            if(height-currentHeight<1000){
+        if (isRecieve) {
+            if (height - currentHeight < 1000) {
                 //滑動到最下面
-                window.scroll(0,height);
+                window.scroll(0, height);
             }
-        }else{
+        } else {
             //滑動到最下面
-            window.scroll(0,height);
+            window.scroll(0, height);
         }
-  
+
     }
 
     //進入聊天室
@@ -154,13 +154,13 @@ class Chat extends Component {
         //         this.setState({ msgs });
         //     })
         //     //測試
-            // this.state.HubConnection.on("IntoChat", (content) => {
-            //     const text = content;
-            //     //把講過的話組合成陣列
-            //     //const msgs = this.state.msgs.concat([text]);
-            //     //刷新讓他渲染
-            //     //this.setState({ msgs });
-            // })
+        // this.state.HubConnection.on("IntoChat", (content) => {
+        //     const text = content;
+        //     //把講過的話組合成陣列
+        //     //const msgs = this.state.msgs.concat([text]);
+        //     //刷新讓他渲染
+        //     //this.setState({ msgs });
+        // })
 
 
 
@@ -176,8 +176,8 @@ class Chat extends Component {
         // let _this = this;
         // window.addEventListener("scroll",_this.handleScroll
         // )
-        
-        
+
+
         //初始化資料
         const data = this.initPassData();
         this.initData = { ...data };
@@ -221,15 +221,15 @@ class Chat extends Component {
             this.setState({ msgs });
 
             //如果是別人傳的就不用刷到底
-            if(memid == memberid){
+            if (memid == memberid) {
                 this.handleScroll();
-            }else{
+            } else {
                 this.handleScroll(true);
             }
-           
+
         })
 
-        
+
 
     }
 
@@ -249,7 +249,7 @@ class Chat extends Component {
         this.setState({ msgs: [initmsg] })
     }
 
-    
+
 
     render() {
 
@@ -266,94 +266,14 @@ class Chat extends Component {
                 <div className="outborder topborder">
                     <div className="container mt-3 mcbd">
                         <div className="row justify-content-center">
-                            <div className="card col-7 my-2 chatbox">
-                                <div className="mt-2">
-
-                                    <div className="headerdp">
-
-                                        <div className="">
-                                            <img className="mx-3 headphoto" src={woman} style={{ "width": 50 }} alt="" />
-                                            <div className="headerdp chnsz" style={{ "verticalAlign": "top" }}>台北張阿姨</div>
-
-                                        </div>
-
-
-                                        <div className=" ctmsg ctmsgsf px-2">寶貝今晚來陪我啊 </div>
-
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                            <div className="card col-7 my-2 chatbox">
-                                <div className="mt-2">
-
-                                    <div className="headerdp">
-
-                                        <div className="">
-                                            <img className="mx-3 headphoto  float-right" src={man} style={{ "width": 50 }} alt="" />
-
-                                        </div>
-
-
-                                        <div className=" float-right mt-5 ctmsg px-2" >閉嘴低能兒 </div>
-
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
                             {/*訊息內容 */}
-                            {
-                                msgs.map((m, index) => (
-                                    m.memberid === parseInt(memberid) ?
-                                        <div className="card col-7 my-2 chatbox" key={index}>
-                                            <div className="mt-2">
-
-                                                <div className="headerdp">
-                                                    {/*大頭貼*/}
-                                                    <div className="">
-                                                        <img className="mx-3 headphoto  float-right" src={m.gender === "男" ? man : woman} style={{ "width": 50 }} alt="" />
-                                                    </div>
-
-                                                    <div className=" float-right mt-5 ctmsg px-2" >{m.text} </div>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        :
-                                        <div className="card col-7 my-2 chatbox" key={index}>
-                                            <div className="mt-2">
-
-                                                <div className="headerdp">
-
-                                                    <div className="">
-                                                        <img className="mx-3 headphoto" src={m.gender === "男" ? man : woman} style={{ "width": 50 }} alt="" />
-                                                        <div className="headerdp chnsz" style={{ "verticalAlign": "top" }}>{m.username}</div>
-
-                                                    </div>
-
-                                                    <div className=" ctmsg ctmsgsf px-2">{m.text} </div>
-
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                ))
-                            }
-
+                            {msgs!==[]?<ChatBox msgs={msgs} memberid={memberid}/>:null}
 
                         </div>
                     </div>
-                    
-                   
-                    
+
+
+
                     {/*輸入框*/}
                     <nav className="nav fixed-bottom mb-3" role="navigation">
                         <div className="container justify-content-center">
@@ -371,7 +291,58 @@ class Chat extends Component {
     }
 }
 
+
+
+function ChatBox(props) {
+    return (
+        <Fragment>
+            {
+                props.msgs.map((m, index) => (
+                    m.memberid === parseInt(props.memberid) ?
+                        <div className="card col-7 my-2 chatbox" key={index}>
+                            <div className="mt-2">
+
+                                <div className="headerdp">
+                                    {/*大頭貼*/}
+                                    <div className="">
+                                        <img className="mx-3 headphoto  float-right" src={m.gender === "男" ? man : woman} style={{ "width": 50 }} alt="" />
+                                    </div>
+
+                                    <div className=" float-right mt-5 ctmsg px-2" >{m.text} </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        :
+                        <div className="card col-7 my-2 chatbox" key={index}>
+                            <div className="mt-2">
+
+                                <div className="headerdp">
+
+                                    <div className="">
+                                        <img className="mx-3 headphoto" src={m.gender === "男" ? man : woman} style={{ "width": 50 }} alt="" />
+                                        <div className="headerdp chnsz" style={{ "verticalAlign": "top" }}>{m.username}</div>
+
+                                    </div>
+
+                                    <div className=" ctmsg ctmsgsf px-2">{m.text} </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                ))
+            }
+
+        </Fragment>
+    );
+}
+
+
+
 export default connect(
     state => ({ hubConnection: state.hubConnection, msgs: state.msgs }),
-    { connectToHub, getMsg,saveChatMsgs,updateToRead }
+    { connectToHub, getMsg, saveChatMsgs, updateToRead }
 )(Chat);

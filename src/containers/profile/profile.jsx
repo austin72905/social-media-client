@@ -29,6 +29,7 @@ class MyProfile extends Component {
         const routeparam = path.split("/");
         console.log("用戶資料", routeparam);
         this.props.getUserDetail({ memberid, userprofile: routeparam[2] });
+        window.scrollTo(0, 0);
     }
 
     // goChat = (userid = 1) => {
